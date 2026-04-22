@@ -15,11 +15,16 @@ const firebaseConfig = {
 let app, db, analytics;
 
 try {
-    app = initializeApp(firebaseConfig);
-    db = getFirestore(app);
-    isSupported().then(yes => yes && (analytics = getAnalytics(app)));
+    const configValid = Object.values(firebaseConfig).some(val => val && val.length > 0);
+    if (!configValid) {
+        console.warn("⚠️ Firebase credentials missing/empty. Ensure environment variables are configured in your hosting platform (Netlify).");
+    } else {
+        app = initializeApp(firebaseConfig);
+        db = getFirestore(app);
+        isSupported().then(yes => yes && (analytics = getAnalytics(app)));
+    }
 } catch (error) {
-    console.warn("Firebase no está configurado correctamente. Por favor, añada las variables de entorno en .env.", error);
+    console.error("Error en inicialización de Firebase:", error);
 }
 
 export { db, analytics };
