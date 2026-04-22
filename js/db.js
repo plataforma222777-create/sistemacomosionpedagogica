@@ -13,7 +13,6 @@ class Database {
         };
         this.ready = false;
         this.onReadyCallbacks = [];
-        this.unsubscribers = {};
         this.init();
     }
 
@@ -56,9 +55,6 @@ class Database {
         }, (error) => {
             console.warn(`Error escuchando cambios de ${table}:`, error);
         });
-
-        this.unsubscribers = this.unsubscribers || {};
-        this.unsubscribers[table] = unsub;
     }
 
     onReady(cb) {
